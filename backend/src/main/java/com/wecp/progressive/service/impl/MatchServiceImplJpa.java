@@ -22,34 +22,45 @@ public class MatchServiceImplJpa implements MatchService
 
     public List<Match> getAllMatches() throws SQLException
     {
-        // List<Match> matches = new ArrayList<Match>();
-        // return matches;
-        return null;
+        return matchRepository.findAll();
     }
 
     public Match getMatchById(int matchId) throws SQLException
     {
-        return (null);
+        return matchRepository.findByMatchId(matchId);
     }
 
     public Integer addMatch(Match match) throws SQLException
     {
-        return null;
+        Match matchObj = matchRepository.save(match);
+        return (matchObj.getMatchId());
     }
 
     public void updateMatch(Match match) throws SQLException
     {
+        Match matchObj = matchRepository.findById(match.getMatchId()).get();
+        matchObj.setMatchId(match.getMatchId());
+        matchObj.setFirstTeamId(match.getFirstTeamId());
+        matchObj.setSecondTeamId(match.getSecondTeamId());
+        matchObj.setMatchDate(match.getMatchDate());
+        matchObj.setVenue(match.getVenue());
+        matchObj.setResult(match.getResult());
+        matchObj.setStatus(match.getStatus());
+        matchObj.setWinnerTeamId(match.getWinnerTeamId());
+
+        matchObj = matchRepository.save(matchObj);
 
     }
 
     public void deleteMatch(int matchId) throws SQLException
     {
-
+        matchRepository.deleteById(matchId);
     }
 
     @Override
     public List<Match> getAllMatchesByStatus(String status) throws SQLException 
     {
-        return MatchService.super.getAllMatchesByStatus(status);
+        //return MatchService.super.getAllMatchesByStatus(status);
+        return matchRepository.findAllByStatus(status);
     }  
 }
